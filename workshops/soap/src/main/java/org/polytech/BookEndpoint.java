@@ -2,6 +2,8 @@ package org.polytech;
 
 import io.spring.guides.gs_producing_web_service.GetBookRequest;
 import io.spring.guides.gs_producing_web_service.GetBookResponse;
+import io.spring.guides.gs_producing_web_service.GetBooksRequest;
+import io.spring.guides.gs_producing_web_service.GetBooksResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -24,6 +26,15 @@ public class BookEndpoint {
     public GetBookResponse getBook(@RequestPayload GetBookRequest request) {
         GetBookResponse response = new GetBookResponse();
         response.setBook(bookRepository.findBook(request.getId()));
+
+        return response;
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getBooksRequest")
+    @ResponsePayload
+    public GetBooksResponse getBooks(@RequestPayload GetBooksRequest request) {
+        GetBooksResponse response = new GetBooksResponse();
+        response.getBooks().addAll(bookRepository.getAllBooks());
 
         return response;
     }
